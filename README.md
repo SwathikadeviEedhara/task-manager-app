@@ -1,4 +1,4 @@
-# Task Manager — [Your Name or Team]
+# Task Manager 
 
 ## What
 Creating a simple task manager app (MVP): user auth, CRUD tasks, filter/search.
