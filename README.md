@@ -5,7 +5,7 @@ Creating a simple task manager app (MVP): user auth, CRUD tasks, filter/search.
 
 ## Tech stack
 - Backend: Java, Spring Boot, Spring Data JPA (Hibernate)
-- Database: MySQL
+- Database: PostgreSql
 - Frontend: React
 - Auth: JWT
 - Dev: Git, Maven, Node.js
