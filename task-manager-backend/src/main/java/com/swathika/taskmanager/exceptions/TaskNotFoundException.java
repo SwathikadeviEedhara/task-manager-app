@@ -1,0 +1,12 @@
+package com.swathika.taskmanager.exceptions;
+
+public class TaskNotFoundException extends RuntimeException{
+
+	
+	public TaskNotFoundException(String message) {
+        super(message);
+    }
+	
+	
+	
+}
