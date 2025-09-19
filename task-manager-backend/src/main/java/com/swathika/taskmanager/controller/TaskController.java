@@ -1,7 +1,7 @@
 package com.swathika.taskmanager.controller;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,55 +13,52 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.swathika.taskmanager.Service.TaskService;
 import com.swathika.taskmanager.entities.Task;
-import com.swathika.taskmanager.exceptions.TaskNotFoundException;
-import com.swathika.taskmanager.repository.TaskRepository;
-
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/api/task")
 public class TaskController {
-@Autowired
-	TaskRepository taskRepository;
+
+	@Autowired
+    private TaskService taskservice;
 	
 	
 	@GetMapping
-	public List<Task> getAlltask(){
-		
-		return taskRepository.findAll();
-		
+	public ResponseEntity<List<Task>> getAlltask(){
+		 
+		List<Task> allTasks =taskservice.getAlltask();		
+		 return ResponseEntity.ok(allTasks); 
 	}
 	
 	
 	
 	@PostMapping
-	public void createTask(@Valid @RequestBody Task task) {
+	public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
 		
-		taskRepository.save(task);
+	Task newtask=taskservice.createTask(task);
+	 return ResponseEntity.ok(newtask); 
+		
 	}
+
 	
 	
-	@PutMapping("/api/tasks/{id}")
-	public Task updateTask(@PathVariable Long id, @Valid @RequestBody Task taskDetails) {
+	@PutMapping("/{id}")
+	public ResponseEntity<Task> updateTask(@PathVariable Long id, @Valid @RequestBody Task taskDetails) {
 	  
-
-	    Optional<Task> task = taskRepository.findById(id);
-	    if (task.isEmpty()) {
-	        throw new TaskNotFoundException("Task with ID " + id + " not found");
-	    }
-	    return task.get();
+		return ResponseEntity.ok(taskservice.updateTask(id, taskDetails));
+	    
 	}
 
 	
-	@DeleteMapping("/api/tasks/{id}")
-	public void deleteTask(@PathVariable Long id) {
-	    Optional<Task> deleteTask = taskRepository.findById(id);
-         
-	    if (deleteTask.isEmpty()) {
-	        throw new TaskNotFoundException("Task with ID " + id + " not found");
-	    }
-	       taskRepository.delete(deleteTask.get());
+	
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+	        
+	    
+	        return ResponseEntity.noContent().build();
 	}
 	    
 }
