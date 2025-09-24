@@ -2,9 +2,14 @@ package com.swathika.taskmanager.Service;
 
 import java.util.List;
 
-import java.util.Optional;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import com.swathika.taskmanager.entities.Task;
 import com.swathika.taskmanager.exceptions.TaskNotFoundException;
 import com.swathika.taskmanager.repository.TaskRepository;
@@ -71,10 +76,19 @@ public class TaskService {
                .orElseThrow(() -> new TaskNotFoundException("Task not found with id " + id));
    }
 	
+   
+   
+	public List<Task> getTasksByStatus(String status) {
+	    return taskRepository.findByStatus(status);
+	}
+
 	
 	
-	
-	
+	public Page<Task> getTasksPaginatedSorted(int page, int size, String sortBy, String direction) {
+	    Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+	    Pageable pageable = PageRequest.of(page, size, sort);
+	    return taskRepository.findAll(pageable);
+	}
 	
 
 }
