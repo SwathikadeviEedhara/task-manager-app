@@ -9,12 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import com.swathika.taskmanager.entities.Task;
 import com.swathika.taskmanager.exceptions.TaskNotFoundException;
 import com.swathika.taskmanager.repository.TaskRepository;
 
-
+@Service
 public class TaskService {
 	
 	

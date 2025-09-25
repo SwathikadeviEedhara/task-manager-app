@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,12 +28,11 @@ import jakarta.validation.Valid;
 public class TaskController {
 
 	@Autowired
-    private TaskService taskservice;
+    private TaskService taskService;
 	
-	
-	@GetMapping
+	@GetMapping("")
 	public ResponseEntity<Response<List<Task>>> getAllTask() {
-	    List<Task> allTasks = taskservice.getAlltask();
+	    List<Task> allTasks = taskService.getAlltask();
 	    Response<List<Task>> response = new Response<>();
 	    response.setStatusCode(200);
 	    response.setMessage("Tasks retrieved successfully");
@@ -43,7 +43,7 @@ public class TaskController {
 	
 	@PostMapping
 	public ResponseEntity<Response<Task>> createTask(@Valid @RequestBody Task task) {
-	    Task createdTask = taskservice.createTask(task);
+	    Task createdTask = taskService.createTask(task);
 	    Response<Task> response = new Response<>();
 	    response.setStatusCode(201);
 	    response.setMessage("Task created successfully");
@@ -55,7 +55,7 @@ public class TaskController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Response<Task>> updateTask(@PathVariable Long id, @Valid @RequestBody Task taskDetails) {
-	    Task updatedTask = taskservice.updateTask(id, taskDetails);
+	    Task updatedTask = taskService.updateTask(id, taskDetails);
 	    Response<Task> response = new Response<>();
 	    response.setStatusCode(200);
 	    response.setMessage("Task updated successfully");
@@ -65,10 +65,10 @@ public class TaskController {
 
 
 	
-	
+	 @PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Response<Void>> deleteTask(@PathVariable Long id) {
-	    taskservice.deleteTask(id);
+	    taskService.deleteTask(id);
 	    Response<Void> response = new Response<>();
 	    response.setStatusCode(204);
 	    response.setMessage("Task deleted successfully");
@@ -78,7 +78,7 @@ public class TaskController {
 
 	@GetMapping("/search")
 	public ResponseEntity<Response<List<Task>>> getTasksByStatus(@RequestParam String status) {
-	    List<Task> tasks = taskservice.getTasksByStatus(status);
+	    List<Task> tasks = taskService.getTasksByStatus(status);
 	    Response<List<Task>> response = new Response<>();
 	    response.setStatusCode(200);
 	    response.setMessage("Tasks filtered by status");
@@ -95,7 +95,7 @@ public class TaskController {
 	    @RequestParam(defaultValue = "id") String sortBy,
 	    @RequestParam(defaultValue = "asc") String direction) {
 	    
-	    Page<Task> taskPage = taskservice.getTasksPaginatedSorted(page, size, sortBy, direction);
+	    Page<Task> taskPage = taskService.getTasksPaginatedSorted(page, size, sortBy, direction);
 	    Response<Page<Task>> response = new Response<>();
 	    response.setStatusCode(200);
 	    response.setMessage("Paginated and sorted tasks retrieved");
