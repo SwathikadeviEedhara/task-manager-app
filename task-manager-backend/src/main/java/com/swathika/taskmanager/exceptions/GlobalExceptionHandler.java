@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.swathika.taskmanager.DTO.Response;
-import com.swathika.taskmanager.entities.Task;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
